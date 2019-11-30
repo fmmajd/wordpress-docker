@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    ports:
+      - ${DOCKER_APP_PORT-8000}:80
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${DB_DATABASE-wordpress}
+      WORDPRESS_TABLE_PREFIX: ${DB_PREFIX-''}
+      WORDPRESS_DEBUG: ${WORDPRESS_DEBUG-1}
+    volumes:
+      - ./wordpress:/var/www/html
+
+  db:
+    image: mariadb:10.4
+    ports:
+      - ${DOCKER_DATABASE_PORT-3306}:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./docker/mysql/databases:/var/lib/mysql
