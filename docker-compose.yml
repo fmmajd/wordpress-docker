@@ -14,6 +14,7 @@ services:
 
   db:
     image: mariadb:10.3
+    restart: always
     ports:
       - ${DOCKER_DATABASE_PORT-3306}:3306
     environment:
